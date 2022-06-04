@@ -1,5 +1,6 @@
 package com.smalaca.restapp.api.rest.todo;
 
+import com.smalaca.restapp.api.rest.NotFoundEntityException;
 import com.smalaca.restapp.domain.todo.ToDoItem;
 import com.smalaca.restapp.domain.todo.ToDoItemDto;
 import com.smalaca.restapp.domain.todo.ToDoItemRepository;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -63,7 +66,19 @@ public class ToDoRestController {
 
     @GetMapping("/{id}")
     public ToDoItemDto findById(@PathVariable Long id) {
-        return repository.findById(id).get().asDto();
+        Optional<ToDoItem> found = repository.findById(id);
+
+        if (found.isPresent()) {
+            return found.get().asDto();
+        } else {
+            throw new NotFoundEntityException(id);
+        }
+    }
+
+    @ExceptionHandler(NotFoundEntityException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handle(NotFoundEntityException exception) {
+        return exception.getMessage();
     }
 
     @DeleteMapping("/{id}")

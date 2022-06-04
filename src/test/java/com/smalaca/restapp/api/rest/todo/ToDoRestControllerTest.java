@@ -75,7 +75,8 @@ class ToDoRestControllerTest {
         System.out.println(response.getStatusCode());
         System.out.println("------------------");
 
-        ToDoItemTestDto result = client.getForObject(URL + "/" + response.getBody(), ToDoItemTestDto.class);
+        ToDoItemTestDto result = client.getForObject(URL + "/" + RandomUtils.nextLong(), ToDoItemTestDto.class);
+//        ToDoItemTestDto result = client.getForObject(URL + "/" + response.getBody(), ToDoItemTestDto.class);
 
         Arrays.asList(result).forEach(System.out::println);
     }
