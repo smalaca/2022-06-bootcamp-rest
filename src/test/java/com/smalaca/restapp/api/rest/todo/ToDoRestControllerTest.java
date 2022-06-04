@@ -25,6 +25,18 @@ class ToDoRestControllerTest {
     }
 
     @Test
+    void shouldUpdateSpecificItem() {
+        Long id = client.postForObject(URL, new ToDoItemTestDto("Coding for fun", "Sages Bootcamp", "Charles Xavier"), Long.class);
+        ToDoItemTestDto toDoItemTestDto = client.getForObject(URL + "/" + id, ToDoItemTestDto.class);
+        Arrays.asList(toDoItemTestDto).forEach(System.out::println);
+
+        client.put(URL + "/" + id, new ToDoItemTestDto("Sages Java Bootcamp", "Logan"));
+
+        ToDoItemTestDto result = client.getForObject(URL + "/" + id, ToDoItemTestDto.class);
+        Arrays.asList(result).forEach(System.out::println);
+    }
+
+    @Test
     void shouldReturnSpecificItem() {
         Long id = client.postForObject(URL, new ToDoItemTestDto("Get rest", "with something great to do", "Wanda Maximoff"), Long.class);
 
@@ -58,6 +70,11 @@ class ToDoRestControllerTest {
 
         public ToDoItemTestDto(String title, String description, String assignee) {
             this.title = title;
+            this.description = description;
+            this.assignee = assignee;
+        }
+
+        public ToDoItemTestDto(String description, String assignee) {
             this.description = description;
             this.assignee = assignee;
         }

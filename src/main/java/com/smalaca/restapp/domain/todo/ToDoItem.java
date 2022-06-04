@@ -30,4 +30,9 @@ public class ToDoItem {
     public Long getId() {
         return id;
     }
+
+    public void update(ToDoItemDto dto) {
+        description = dto.getDescription();
+        assignee = dto.getAssignee();
+    }
 }
