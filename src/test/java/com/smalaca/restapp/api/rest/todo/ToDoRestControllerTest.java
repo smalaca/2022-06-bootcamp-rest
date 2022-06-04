@@ -33,6 +33,20 @@ class ToDoRestControllerTest {
         Arrays.asList(result).forEach(System.out::println);
     }
 
+    @Test
+    void shoulDeleteSpecificItem() {
+        client.postForObject(URL, new ToDoItemTestDto("Anything", "description", "Natasha Romanoff"), Long.class);
+        client.postForObject(URL, new ToDoItemTestDto("Nothing", "no description", "Riri Williams"), Long.class);
+        Long id = client.postForObject(URL, new ToDoItemTestDto("Get rest", "with something great to do", "Carol Danver"), Long.class);
+        ToDoItemTestDto[] all = client.getForObject(URL, ToDoItemTestDto[].class);
+        Arrays.asList(all).forEach(System.out::println);
+
+        client.delete(URL + "/" + id);
+
+        ToDoItemTestDto[] result = client.getForObject(URL, ToDoItemTestDto[].class);
+        Arrays.asList(result).forEach(System.out::println);
+    }
+
     @Getter
     @ToString
     @NoArgsConstructor

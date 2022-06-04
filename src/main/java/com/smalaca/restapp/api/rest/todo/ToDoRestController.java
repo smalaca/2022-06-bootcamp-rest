@@ -3,6 +3,7 @@ package com.smalaca.restapp.api.rest.todo;
 import com.smalaca.restapp.domain.todo.ToDoItem;
 import com.smalaca.restapp.domain.todo.ToDoItemDto;
 import com.smalaca.restapp.domain.todo.ToDoItemRepository;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +36,11 @@ public class ToDoRestController {
     @GetMapping("/{id}")
     public ToDoItemDto findById(@PathVariable Long id) {
         return repository.findById(id).get().asDto();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) {
+        repository.deleteById(id);
     }
 
     @PostMapping
