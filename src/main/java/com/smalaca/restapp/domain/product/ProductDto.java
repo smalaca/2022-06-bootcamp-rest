@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ProductDto {
     private Long id;
+    private String creationHost;
+    private String creationUser;
     private String serialNumber;
     private String name;
     private BigDecimal price;

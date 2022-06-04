@@ -14,13 +14,17 @@ public class Product {
     @Id
     @GeneratedValue
     private Long id;
+    private String creationHost;
+    private String creationUser;
     private String serialNumber;
     private String name;
     private BigDecimal price;
     private String description;
     private Long shopId;
 
-    public Product(String serialNumber, String name, BigDecimal price, String description, Long shopId) {
+    public Product(String creationHost, String creationUser, String serialNumber, String name, BigDecimal price, String description, Long shopId) {
+        this.creationHost = creationHost;
+        this.creationUser = creationUser;
         this.serialNumber = serialNumber;
         this.name = name;
         this.price = price;
@@ -29,7 +33,7 @@ public class Product {
     }
 
     public ProductDto asDto() {
-        return new ProductDto(id, serialNumber, name, price, description, shopId);
+        return new ProductDto(id, creationHost, creationUser, serialNumber, name, price, description, shopId);
     }
 
     public Long getId() {

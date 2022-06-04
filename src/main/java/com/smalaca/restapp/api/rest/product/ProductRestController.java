@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -76,11 +77,16 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> create(@RequestBody ProductDto dto) {
+    public ResponseEntity<Long> create(
+            @RequestBody ProductDto dto,
+            @RequestHeader("host") String creationHost,
+            @RequestHeader(name = "user", defaultValue = "UNKNOWN") String creationUser) {
         if (repository.existsBySerialNumber(dto.getSerialNumber())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } else {
-            Product product = new Product(dto.getSerialNumber(), dto.getName(), dto.getPrice(), dto.getDescription(), dto.getShopId());
+            Product product = new Product(
+                    creationHost, creationUser,
+                    dto.getSerialNumber(), dto.getName(), dto.getPrice(), dto.getDescription(), dto.getShopId());
             Long id = repository.save(product).getId();
 
             return ResponseEntity.status(HttpStatus.CREATED).body(id);

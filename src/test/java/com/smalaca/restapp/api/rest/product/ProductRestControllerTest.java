@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -16,13 +19,13 @@ class ProductRestControllerTest {
 
     @BeforeAll
     static void beforeAll() {
-        CLIENT.postForObject(URL, new ProductTestDto("AFA141", "Water", BigDecimal.valueOf(13), "to drink", 1L), Long.class);
-        CLIENT.postForObject(URL, new ProductTestDto("AAA123", "Water", BigDecimal.valueOf(42), "to drink", 1L), Long.class);
-        CLIENT.postForObject(URL, new ProductTestDto("CZX123", "Water", BigDecimal.valueOf(55), "to drink", 3L), Long.class);
-        CLIENT.postForObject(URL, new ProductTestDto("FDS134", "Bread", BigDecimal.valueOf(42), "to eat", 1L), Long.class);
-        CLIENT.postForObject(URL, new ProductTestDto("FDS135", "Coffee", BigDecimal.valueOf(42), "to eat", 3L), Long.class);
-        CLIENT.postForObject(URL, new ProductTestDto("KJH855", "Coffee", BigDecimal.valueOf(12.34), "the best drink ever", 2L), Long.class);
-        CLIENT.postForObject(URL, new ProductTestDto("KJJ577", "Tea", BigDecimal.valueOf(7.13), "good to drink from time to time", 3L), Long.class);
+//        CLIENT.postForObject(URL, new ProductTestDto("AFA141", "Water", BigDecimal.valueOf(13), "to drink", 1L), Long.class);
+//        CLIENT.postForObject(URL, new ProductTestDto("AAA123", "Water", BigDecimal.valueOf(42), "to drink", 1L), Long.class);
+//        CLIENT.postForObject(URL, new ProductTestDto("CZX123", "Water", BigDecimal.valueOf(55), "to drink", 3L), Long.class);
+//        CLIENT.postForObject(URL, new ProductTestDto("FDS134", "Bread", BigDecimal.valueOf(42), "to eat", 1L), Long.class);
+//        CLIENT.postForObject(URL, new ProductTestDto("FDS135", "Coffee", BigDecimal.valueOf(42), "to eat", 3L), Long.class);
+//        CLIENT.postForObject(URL, new ProductTestDto("KJH855", "Coffee", BigDecimal.valueOf(12.34), "the best drink ever", 2L), Long.class);
+//        CLIENT.postForObject(URL, new ProductTestDto("KJJ577", "Tea", BigDecimal.valueOf(7.13), "good to drink from time to time", 3L), Long.class);
     }
 
     @Test
@@ -57,7 +60,10 @@ class ProductRestControllerTest {
 
     @Test
     void shouldUpdateSpecificProduct() {
-        Long id = CLIENT.postForObject(URL, new ProductTestDto("IUD456", "Honey", BigDecimal.valueOf(100), "sweet", 1L), Long.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("user", "Gwen Stacy a.k.a Spider Ghost");
+        ProductTestDto dto = new ProductTestDto("IUE456", "Honey", BigDecimal.valueOf(100), "sweet", 1L);
+        Long id = CLIENT.exchange(URL, HttpMethod.POST, new HttpEntity<>(dto, headers), Long.class).getBody();
 
         CLIENT.put(URL + "/" + id, new ProductTestDto("Sweet Honey", BigDecimal.valueOf(97), "great for breakfest"));
 
@@ -82,6 +88,8 @@ class ProductRestControllerTest {
     @NoArgsConstructor
     public static class ProductTestDto {
         private Long id;
+        private String creationHost;
+        private String creationUser;
         private String serialNumber;
         private String name;
         private BigDecimal price;
