@@ -27,6 +27,15 @@ public class ToDoRestController {
         this.repository = repository;
     }
 
+    @GetMapping("by-ids")
+    public List<ToDoItemDto> findAllByIds(@RequestParam List<Long> ids) {
+        Iterable<ToDoItem> iterable= repository.findAllByIdIn(ids);
+
+        return StreamSupport.stream(iterable.spliterator(), false)
+                .map(ToDoItem::asDto)
+                .collect(Collectors.toList());
+    }
+
     @GetMapping
     public List<ToDoItemDto> findAll(@RequestParam Map<String, String> params) {
         Iterable<ToDoItem> iterable;

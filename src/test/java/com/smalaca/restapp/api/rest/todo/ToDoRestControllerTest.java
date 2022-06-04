@@ -25,6 +25,13 @@ class ToDoRestControllerTest {
     }
 
     @Test
+    void shouldReturnAllToDoItemsWithGivenIds() {
+        ToDoItemTestDto[] result = client.getForObject(URL + "/by-ids?ids=1&ids=3&ids=6", ToDoItemTestDto[].class);
+
+        Arrays.asList(result).forEach(System.out::println);
+    }
+
+    @Test
     void shouldReturnAllToDoItemsWithGivenTitle() {
         ToDoItemTestDto[] result = client.getForObject(URL + "?title=Nothing&assignee=TonyStark", ToDoItemTestDto[].class);
 
