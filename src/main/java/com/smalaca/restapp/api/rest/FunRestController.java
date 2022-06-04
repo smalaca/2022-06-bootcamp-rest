@@ -5,16 +5,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("rest")
 public class FunRestController {
-    @GetMapping
+    @GetMapping("fun")
     public String isFun() {
         return "REST is fun!";
     }
 
-    @GetMapping("/{login}/{luckyNumber}")
-    public String luckyNumber(@PathVariable String login, @PathVariable int luckyNumber) {
-        return "Cześć, jestem " + login + ". Moja szczęśliwa liczba to: " + luckyNumber;
+    @GetMapping(value = {"{login}", "{login}/{luckyNumber}"})
+    public String luckyNumber(@PathVariable String login, @PathVariable Optional<Integer> luckyNumber) {
+        return "Cześć, jestem " + login + ". Moja szczęśliwa liczba to: " + luckyNumber.orElse(13);
+    }
+
+    @GetMapping
+    public String luckyNumberForNoName() {
+        return "Kim jesteś i jaka jest Twoja szczęśliwa liczba?";
     }
 }
