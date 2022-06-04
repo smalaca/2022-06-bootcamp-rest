@@ -4,6 +4,9 @@ import com.smalaca.restapp.api.rest.NotFoundEntityException;
 import com.smalaca.restapp.domain.todo.ToDoItem;
 import com.smalaca.restapp.domain.todo.ToDoItemDto;
 import com.smalaca.restapp.domain.todo.ToDoItemRepository;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
@@ -13,14 +16,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,7 @@ public class ToDoRestController {
     }
 
     @GetMapping
-    public List<ToDoItemDto> findAll(@RequestParam Map<String, String> params) {
+    public CollectionModel<ToDoItemDto> findAll(@RequestParam Map<String, String> params) {
         Iterable<ToDoItem> iterable;
 
         if (!params.containsKey("title") && !params.containsKey("assignee")) {
@@ -58,9 +59,13 @@ public class ToDoRestController {
             iterable = repository.findAllByTitleOrAssignee(params.get("title"), params.get("assignee"));
         }
 
-        return StreamSupport.stream(iterable.spliterator(), false)
+        List<ToDoItemDto> dtos = StreamSupport.stream(iterable.spliterator(), false)
                 .map(ToDoItem::asDto)
                 .collect(Collectors.toList());
+
+        Link linkOne = WebMvcLinkBuilder.linkTo(ToDoRestController.class).withSelfRel();
+        Link linkTwo = WebMvcLinkBuilder.linkTo(ToDoRestController.class).withRel("todo-item-resource");
+        return CollectionModel.of(dtos, linkOne, linkTwo);
     }
 
     @GetMapping("/{id}")
@@ -96,10 +101,7 @@ public class ToDoRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Long create(
-            @RequestBody ToDoItemDto dto,
-            @RequestHeader Map<String, String> headers,
-            HttpServletRequest request, HttpServletResponse response) {
+    public Long create(@RequestBody ToDoItemDto dto, HttpServletResponse response) {
         Cookie cookie = new Cookie("from-server", "cookie-monster");
         cookie.setHttpOnly(true);
         cookie.setMaxAge(100);

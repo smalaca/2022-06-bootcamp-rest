@@ -21,13 +21,13 @@ class ToDoRestControllerTest {
 
     @BeforeAll
     static void beforeAll() {
-//        client.postForObject(URL, new ToDoItemTestDto("Let's do something", "fancy description", "Steve Rogers"), Long.class);
-//        client.postForObject(URL, new ToDoItemTestDto("Lazy day", "nothing to do", "Tony Stark"), Long.class);
-//        client.postForObject(URL, new ToDoItemTestDto("Yet another lazy day", "nothing to do", "Tony Stark"), Long.class);
-//        client.postForObject(URL, new ToDoItemTestDto("Anything", "description", "Odinson"), Long.class);
-//        client.postForObject(URL, new ToDoItemTestDto("Nothing", "no description", "Black Pather"), Long.class);
-//        client.postForObject(URL, new ToDoItemTestDto("Nothing", "with description", "Black Widow"), Long.class);
-//        client.postForObject(URL, new ToDoItemTestDto("Nothing", "some description", "Black Adam"), Long.class);
+        client.postForObject(URL, new ToDoItemTestDto("Let's do something", "fancy description", "Steve Rogers"), Long.class);
+        client.postForObject(URL, new ToDoItemTestDto("Lazy day", "nothing to do", "Tony Stark"), Long.class);
+        client.postForObject(URL, new ToDoItemTestDto("Yet another lazy day", "nothing to do", "Tony Stark"), Long.class);
+        client.postForObject(URL, new ToDoItemTestDto("Anything", "description", "Odinson"), Long.class);
+        client.postForObject(URL, new ToDoItemTestDto("Nothing", "no description", "Black Pather"), Long.class);
+        client.postForObject(URL, new ToDoItemTestDto("Nothing", "with description", "Black Widow"), Long.class);
+        client.postForObject(URL, new ToDoItemTestDto("Nothing", "some description", "Black Adam"), Long.class);
     }
 
     @Test
