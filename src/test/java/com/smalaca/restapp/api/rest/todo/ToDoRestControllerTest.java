@@ -71,7 +71,9 @@ class ToDoRestControllerTest {
         headers.add(HttpHeaders.COOKIE, "login=scarletSpider;password=ENCODED;color=red");
         HttpEntity<ToDoItemTestDto> entity = new HttpEntity<>(new ToDoItemTestDto("Get rest", "with something great to do", "Wanda Maximoff"), headers);
         ResponseEntity<Long> response = client.exchange(URL, HttpMethod.POST, entity, Long.class);
-        System.out.println(response.getHeaders().get(HttpHeaders.SET_COOKIE));
+        System.out.println("------------------");
+        System.out.println(response.getStatusCode());
+        System.out.println("------------------");
 
         ToDoItemTestDto result = client.getForObject(URL + "/" + response.getBody(), ToDoItemTestDto.class);
 
