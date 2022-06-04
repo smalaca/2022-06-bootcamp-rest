@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -87,8 +89,12 @@ public class ToDoRestController {
     public Long create(
             @RequestBody ToDoItemDto dto,
             @RequestHeader Map<String, String> headers,
-            HttpServletRequest request) {
+            HttpServletRequest request, HttpServletResponse response) {
         ToDoItem toDoItem = new ToDoItem(dto.getTitle(), dto.getDescription(), dto.getAssignee());
+        Cookie cookie = new Cookie("from-server", "cookie-monster");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(100);
+        response.addCookie(cookie);
 
         return repository.save(toDoItem).getId();
     }
