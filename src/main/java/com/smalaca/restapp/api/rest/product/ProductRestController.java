@@ -3,6 +3,8 @@ package com.smalaca.restapp.api.rest.product;
 import com.smalaca.restapp.domain.product.Product;
 import com.smalaca.restapp.domain.product.ProductDto;
 import com.smalaca.restapp.domain.product.ProductRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,9 +64,14 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public Long create(@RequestBody ProductDto dto) {
-        Product product = new Product(dto.getSerialNumber(), dto.getName(), dto.getPrice(), dto.getDescription(), dto.getShopId());
+    public ResponseEntity<Long> create(@RequestBody ProductDto dto) {
+        if (repository.existsBySerialNumber(dto.getSerialNumber())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } else {
+            Product product = new Product(dto.getSerialNumber(), dto.getName(), dto.getPrice(), dto.getDescription(), dto.getShopId());
+            Long id = repository.save(product).getId();
 
-        return repository.save(product).getId();
+            return ResponseEntity.status(HttpStatus.CREATED).body(id);
+        }
     }
 }

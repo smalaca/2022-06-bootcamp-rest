@@ -20,7 +20,7 @@ class ProductRestControllerTest {
         CLIENT.postForObject(URL, new ProductTestDto("AAA123", "Water", BigDecimal.valueOf(42), "to drink", 1L), Long.class);
         CLIENT.postForObject(URL, new ProductTestDto("CZX123", "Water", BigDecimal.valueOf(55), "to drink", 3L), Long.class);
         CLIENT.postForObject(URL, new ProductTestDto("FDS134", "Bread", BigDecimal.valueOf(42), "to eat", 1L), Long.class);
-        CLIENT.postForObject(URL, new ProductTestDto("FDS134", "Coffee", BigDecimal.valueOf(42), "to eat", 3L), Long.class);
+        CLIENT.postForObject(URL, new ProductTestDto("FDS135", "Coffee", BigDecimal.valueOf(42), "to eat", 3L), Long.class);
         CLIENT.postForObject(URL, new ProductTestDto("KJH855", "Coffee", BigDecimal.valueOf(12.34), "the best drink ever", 2L), Long.class);
         CLIENT.postForObject(URL, new ProductTestDto("KJJ577", "Tea", BigDecimal.valueOf(7.13), "good to drink from time to time", 3L), Long.class);
     }

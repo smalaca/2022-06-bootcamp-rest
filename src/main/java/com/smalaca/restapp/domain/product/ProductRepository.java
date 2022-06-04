@@ -8,4 +8,6 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     Iterable<Product> findAllBySerialNumberOrName(String serialNumber, String name);
 
     Iterable<Product> findAllByShopIdIn(List<Long> shopIds);
+
+    boolean existsBySerialNumber(String serialNumber);
 }
