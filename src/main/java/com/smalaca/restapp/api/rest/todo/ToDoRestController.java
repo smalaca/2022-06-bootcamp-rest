@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -82,7 +83,7 @@ public class ToDoRestController {
     }
 
     @PostMapping
-    public Long create(@RequestBody ToDoItemDto dto) {
+    public Long create(@RequestBody ToDoItemDto dto, @RequestHeader Map<String, String> headers) {
         ToDoItem toDoItem = new ToDoItem(dto.getTitle(), dto.getDescription(), dto.getAssignee());
 
         return repository.save(toDoItem).getId();

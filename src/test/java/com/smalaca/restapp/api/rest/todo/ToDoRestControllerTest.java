@@ -6,10 +6,16 @@ import lombok.ToString;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+
+import static java.util.Arrays.asList;
 
 class ToDoRestControllerTest {
     private static final String URL = "http://localhost:8013/todoitem";
@@ -17,13 +23,13 @@ class ToDoRestControllerTest {
 
     @BeforeAll
     static void beforeAll() {
-        client.postForObject(URL, new ToDoItemTestDto("Let's do something", "fancy description", "Steve Rogers"), Long.class);
-        client.postForObject(URL, new ToDoItemTestDto("Lazy day", "nothing to do", "Tony Stark"), Long.class);
-        client.postForObject(URL, new ToDoItemTestDto("Yet another lazy day", "nothing to do", "Tony Stark"), Long.class);
-        client.postForObject(URL, new ToDoItemTestDto("Anything", "description", "Odinson"), Long.class);
-        client.postForObject(URL, new ToDoItemTestDto("Nothing", "no description", "Black Pather"), Long.class);
-        client.postForObject(URL, new ToDoItemTestDto("Nothing", "with description", "Black Widow"), Long.class);
-        client.postForObject(URL, new ToDoItemTestDto("Nothing", "some description", "Black Adam"), Long.class);
+//        client.postForObject(URL, new ToDoItemTestDto("Let's do something", "fancy description", "Steve Rogers"), Long.class);
+//        client.postForObject(URL, new ToDoItemTestDto("Lazy day", "nothing to do", "Tony Stark"), Long.class);
+//        client.postForObject(URL, new ToDoItemTestDto("Yet another lazy day", "nothing to do", "Tony Stark"), Long.class);
+//        client.postForObject(URL, new ToDoItemTestDto("Anything", "description", "Odinson"), Long.class);
+//        client.postForObject(URL, new ToDoItemTestDto("Nothing", "no description", "Black Pather"), Long.class);
+//        client.postForObject(URL, new ToDoItemTestDto("Nothing", "with description", "Black Widow"), Long.class);
+//        client.postForObject(URL, new ToDoItemTestDto("Nothing", "some description", "Black Adam"), Long.class);
     }
 
     @Test
@@ -61,9 +67,18 @@ class ToDoRestControllerTest {
 
     @Test
     void shouldReturnSpecificItem() {
-        Long id = client.postForObject(URL, new ToDoItemTestDto("Get rest", "with something great to do", "Wanda Maximoff"), Long.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("rest-version", "v1");
+        headers.add("user", "ben-reilly");
+        headers.put("logins", asList("Scarlet Spider", "Scarlet-Man", "Jackal"));
+        HttpEntity<ToDoItemTestDto> entity = new HttpEntity<>(new ToDoItemTestDto("Get rest", "with something great to do", "Wanda Maximoff"), headers);
+        ResponseEntity<Long> response = client.exchange(URL, HttpMethod.POST, entity, Long.class);
 
-        ToDoItemTestDto result = client.getForObject(URL + "/" + id, ToDoItemTestDto.class);
+        System.out.println("--------------------");
+        System.out.println(response.getStatusCode());
+        System.out.println(response.getBody());
+        System.out.println("--------------------");
+        ToDoItemTestDto result = client.getForObject(URL + "/" + response.getBody(), ToDoItemTestDto.class);
 
         Arrays.asList(result).forEach(System.out::println);
     }
