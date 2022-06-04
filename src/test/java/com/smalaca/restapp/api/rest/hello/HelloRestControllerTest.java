@@ -1,4 +1,4 @@
-package com.smalaca.restapp.api.rest;
+package com.smalaca.restapp.api.rest.hello;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestTemplate;
