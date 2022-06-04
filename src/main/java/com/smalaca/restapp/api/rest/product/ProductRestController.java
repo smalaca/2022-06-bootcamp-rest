@@ -59,8 +59,13 @@ public class ProductRestController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteById(@PathVariable Long id) {
-        repository.deleteById(id);
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
