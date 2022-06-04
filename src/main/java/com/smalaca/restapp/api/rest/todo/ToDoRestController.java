@@ -3,6 +3,8 @@ package com.smalaca.restapp.api.rest.todo;
 import com.smalaca.restapp.domain.todo.ToDoItem;
 import com.smalaca.restapp.domain.todo.ToDoItemDto;
 import com.smalaca.restapp.domain.todo.ToDoItemRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,8 +62,15 @@ public class ToDoRestController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Long id) {
-        repository.deleteById(id);
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return ResponseEntity.ok("ToDoItem removed");
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("ToDoItem does not exist");
+        }
     }
 
     @PutMapping("{id}")

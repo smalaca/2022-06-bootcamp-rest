@@ -3,8 +3,10 @@ package com.smalaca.restapp.api.rest.todo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -78,6 +80,18 @@ class ToDoRestControllerTest {
 
         ToDoItemTestDto[] result = client.getForObject(URL, ToDoItemTestDto[].class);
         Arrays.asList(result).forEach(System.out::println);
+    }
+
+    @Test
+    void shouldRecognizeDeletedToDoItemDoesNotExists() {
+        try {
+            client.delete(URL + "/" + RandomUtils.nextLong());
+        } catch (HttpClientErrorException exception) {
+            System.out.println("-----------------------");
+            System.out.println(exception.getStatusCode());
+            System.out.println(exception.getResponseBodyAsString());
+            System.out.println("-----------------------");
+        }
     }
 
     @Getter
