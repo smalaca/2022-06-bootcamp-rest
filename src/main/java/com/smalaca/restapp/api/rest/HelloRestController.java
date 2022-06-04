@@ -13,11 +13,11 @@ public class HelloRestController {
 
     @GetMapping(value = {"", "{name}"})
 //    @RequestMapping(method = {RequestMethod.GET})
-    public String hello(@PathVariable Optional<String> name) {
-        if (name.isEmpty()) {
+    public String hello(@PathVariable(name = "name") Optional<String> received) {
+        if (received.isEmpty()) {
             return "Hello world!";
         } else {
-            return "Hello " + name.get() + "!";
+            return "Hello " + received.get() + "!";
         }
     }
 }
