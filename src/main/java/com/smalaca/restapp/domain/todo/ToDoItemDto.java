@@ -1,14 +1,16 @@
 package com.smalaca.restapp.domain.todo;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@Getter
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@Getter // serialization & deserialization
+@NoArgsConstructor // deserialization
+@AllArgsConstructor(access = AccessLevel.PACKAGE) // using in the code
 public class ToDoItemDto {
-    private final Long id;
-    private final String title;
-    private final String description;
-    private final String assignee;
+    private Long id;
+    private String title;
+    private String description;
+    private String assignee;
 }
