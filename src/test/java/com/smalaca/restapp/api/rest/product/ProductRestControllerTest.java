@@ -25,6 +25,27 @@ class ProductRestControllerTest {
         Arrays.stream(response).forEach(System.out::println);
     }
 
+    @Test
+    void shouldReturnSpecificProduct() {
+        Long id = client.postForObject(URL, new ProductTestDto("XYZ987", "Watermelon", BigDecimal.valueOf(42.13), "to eat", 13L), Long.class);
+
+        ProductTestDto response = client.getForObject(URL + "/" + id, ProductTestDto.class);
+
+        System.out.println(response);
+    }
+
+    @Test
+    void shouldDeleteSpecificProduct() {
+        client.postForObject(URL, new ProductTestDto("YYY141", "Water", BigDecimal.valueOf(13), "to drink", 12L), Long.class);
+        client.postForObject(URL, new ProductTestDto("ABC134", "Bread", BigDecimal.valueOf(42), "to eat", 12L), Long.class);
+        Long id = client.postForObject(URL, new ProductTestDto("ZZZ855", "Coffee", BigDecimal.valueOf(12.34), "the best drink ever", 22L), Long.class);
+
+        client.delete(URL + "/" + id);
+
+        ProductTestDto[] response = client.getForObject(URL, ProductTestDto[].class);
+        Arrays.stream(response).forEach(System.out::println);
+    }
+
     @Getter
     @ToString
     @NoArgsConstructor
