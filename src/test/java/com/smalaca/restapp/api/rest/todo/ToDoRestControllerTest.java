@@ -15,8 +15,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 
-import static java.util.Arrays.asList;
-
 class ToDoRestControllerTest {
     private static final String URL = "http://localhost:8013/todoitem";
     private static final RestTemplate client = new RestTemplate();
@@ -70,14 +68,10 @@ class ToDoRestControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.add("rest-version", "v1");
         headers.add("user", "ben-reilly");
-        headers.put("logins", asList("Scarlet Spider", "Scarlet-Man", "Jackal"));
+        headers.add(HttpHeaders.COOKIE, "login=scarletSpider;password=ENCODED;color=red");
         HttpEntity<ToDoItemTestDto> entity = new HttpEntity<>(new ToDoItemTestDto("Get rest", "with something great to do", "Wanda Maximoff"), headers);
         ResponseEntity<Long> response = client.exchange(URL, HttpMethod.POST, entity, Long.class);
 
-        System.out.println("--------------------");
-        System.out.println(response.getStatusCode());
-        System.out.println(response.getBody());
-        System.out.println("--------------------");
         ToDoItemTestDto result = client.getForObject(URL + "/" + response.getBody(), ToDoItemTestDto.class);
 
         Arrays.asList(result).forEach(System.out::println);

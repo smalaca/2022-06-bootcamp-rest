@@ -6,6 +6,7 @@ import com.smalaca.restapp.domain.todo.ToDoItemRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,7 +84,10 @@ public class ToDoRestController {
     }
 
     @PostMapping
-    public Long create(@RequestBody ToDoItemDto dto, @RequestHeader String user, @RequestHeader(name = "rest-version") String restVersion) {
+    public Long create(
+            @RequestBody ToDoItemDto dto,
+            @RequestHeader Map<String, String> headers,
+            @CookieValue String login) {
         ToDoItem toDoItem = new ToDoItem(dto.getTitle(), dto.getDescription(), dto.getAssignee());
 
         return repository.save(toDoItem).getId();
