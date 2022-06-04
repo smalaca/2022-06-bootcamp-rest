@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,12 +72,6 @@ public class ToDoRestController {
         } else {
             throw new NotFoundEntityException(id);
         }
-    }
-
-    @ExceptionHandler(NotFoundEntityException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handle(NotFoundEntityException exception) {
-        return exception.getMessage();
     }
 
     @DeleteMapping("/{id}")
