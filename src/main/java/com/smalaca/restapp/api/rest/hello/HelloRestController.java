@@ -1,4 +1,4 @@
-package com.smalaca.restapp.api.rest;
+package com.smalaca.restapp.api.rest.hello;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
