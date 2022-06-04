@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -26,8 +28,14 @@ public class ToDoRestController {
     }
 
     @GetMapping
-    public List<ToDoItemDto> findAll() {
-        Iterable<ToDoItem> iterable = repository.findAll();
+    public List<ToDoItemDto> findAll(@RequestParam Optional<String> title) {
+        Iterable<ToDoItem> iterable;
+
+        if (title.isEmpty()) {
+            iterable = repository.findAll();
+        } else {
+            iterable = repository.findAllByTitle(title.get());
+        }
 
         return StreamSupport.stream(iterable.spliterator(), false)
                 .map(ToDoItem::asDto)
