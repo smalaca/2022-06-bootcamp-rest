@@ -1,4 +1,4 @@
-package com.smalaca.rest;
+package com.smalaca.restapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
