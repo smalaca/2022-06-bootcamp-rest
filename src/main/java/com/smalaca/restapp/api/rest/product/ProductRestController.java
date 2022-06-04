@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -26,8 +28,18 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public List<ProductDto> findAll() {
-        return StreamSupport.stream(repository.findAll().spliterator(), false)
+    public List<ProductDto> findAll(@RequestParam Map<String, String> params, @RequestParam(required = false) List<Long> shopIds) {
+        Iterable<Product> found;
+
+        if (shopIds != null) {
+            found = repository.findAllByShopIdIn(shopIds);
+        } else if (params.containsKey("serialNumber") && params.containsKey("name")) {
+            found = repository.findAllBySerialNumberOrName(params.get("serialNumber"), params.get("name"));
+        } else {
+            found = repository.findAll();
+        }
+
+        return StreamSupport.stream(found.spliterator(), false)
                 .map(Product::asDto)
                 .collect(Collectors.toList());
     }
