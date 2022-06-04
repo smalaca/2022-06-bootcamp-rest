@@ -28,13 +28,13 @@ public class ToDoRestController {
     }
 
     @GetMapping
-    public List<ToDoItemDto> findAll(@RequestParam Optional<String> title) {
+    public List<ToDoItemDto> findAll(@RequestParam Optional<String> title, @RequestParam Optional<String> assignee) {
         Iterable<ToDoItem> iterable;
 
-        if (title.isEmpty()) {
+        if (title.isEmpty() || assignee.isEmpty()) {
             iterable = repository.findAll();
         } else {
-            iterable = repository.findAllByTitle(title.get());
+            iterable = repository.findAllByTitleOrAssignee(title.get(), assignee.get());
         }
 
         return StreamSupport.stream(iterable.spliterator(), false)
