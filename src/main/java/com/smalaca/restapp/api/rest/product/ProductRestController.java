@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -47,8 +48,14 @@ public class ProductRestController {
     }
 
     @GetMapping("{id}")
-    public ProductDto findById(@PathVariable Long id) {
-        return repository.findById(id).get().asDto();
+    public ResponseEntity<ProductDto> findById(@PathVariable Long id) {
+        Optional<Product> found = repository.findById(id);
+        if (found.isPresent()) {
+            ProductDto productDto = found.get().asDto();
+            return ResponseEntity.ok(productDto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("{id}")
