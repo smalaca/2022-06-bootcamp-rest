@@ -24,6 +24,15 @@ class ToDoRestControllerTest {
         Arrays.asList(result).forEach(System.out::println);
     }
 
+    @Test
+    void shouldReturnSpecificItem() {
+        Long id = client.postForObject(URL, new ToDoItemTestDto("Get rest", "with something great to do", "Wanda Maximoff"), Long.class);
+
+        ToDoItemTestDto result = client.getForObject(URL + "/" + id, ToDoItemTestDto.class);
+
+        Arrays.asList(result).forEach(System.out::println);
+    }
+
     @Getter
     @ToString
     @NoArgsConstructor
