@@ -1,4 +1,4 @@
-package com.smalaca.restapp.api.rest.todo;
+package com.smalaca.restapp.domain.todo;
 
 import lombok.AccessLevel;
 import lombok.Getter;
