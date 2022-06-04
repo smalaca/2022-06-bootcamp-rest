@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/hello")
+@RequestMapping("hello")
 public class HelloRestController {
 
-    @GetMapping(value = {"/", "/{name}"})
+    @GetMapping(value = {"", "{name}"})
 //    @RequestMapping(method = {RequestMethod.GET})
     public String hello(@PathVariable Optional<String> name) {
         if (name.isEmpty()) {
