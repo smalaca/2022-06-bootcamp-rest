@@ -83,7 +83,7 @@ public class ToDoRestController {
     }
 
     @PostMapping
-    public Long create(@RequestBody ToDoItemDto dto, @RequestHeader Map<String, String> headers) {
+    public Long create(@RequestBody ToDoItemDto dto, @RequestHeader String user, @RequestHeader(name = "rest-version") String restVersion) {
         ToDoItem toDoItem = new ToDoItem(dto.getTitle(), dto.getDescription(), dto.getAssignee());
 
         return repository.save(toDoItem).getId();
