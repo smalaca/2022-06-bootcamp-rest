@@ -1,23 +1,38 @@
 package com.smalaca.restapp.api.rest.product;
 
-import com.google.common.collect.ImmutableList;
+import com.smalaca.restapp.domain.product.Product;
+import com.smalaca.restapp.domain.product.ProductDto;
+import com.smalaca.restapp.domain.product.ProductRepository;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("product")
 public class ProductRestController {
+    private final ProductRepository repository;
+
+    public ProductRestController(ProductRepository repository) {
+        this.repository = repository;
+    }
+
     @GetMapping
     public List<ProductDto> findAll() {
-        return ImmutableList.of(
-               new ProductDto(1L, "AFA141", "Water", BigDecimal.valueOf(13), "to drink", 1L),
-               new ProductDto(2L, "FDS134", "Bread", BigDecimal.valueOf(42), "to eat", 1L),
-               new ProductDto(3L, "KJH855", "Coffee", BigDecimal.valueOf(12.34), "the best drink ever", 2L),
-               new ProductDto(4L, "KJJ577", "Tea", BigDecimal.valueOf(7.13), "good to drink from time to time", 3L)
-        );
+        return StreamSupport.stream(repository.findAll().spliterator(), false)
+                .map(Product::asDto)
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping
+    public Long create(@RequestBody ProductDto dto) {
+        Product product = new Product(dto.getSerialNumber(), dto.getName(), dto.getPrice(), dto.getDescription(), dto.getShopId());
+
+        return repository.save(product).getId();
     }
 }

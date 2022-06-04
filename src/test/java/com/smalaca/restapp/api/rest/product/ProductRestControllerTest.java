@@ -1,6 +1,7 @@
 package com.smalaca.restapp.api.rest.product;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestTemplate;
@@ -8,14 +9,17 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ProductRestControllerTest {
     private static final String URL = "http://localhost:8123/product";
     private final RestTemplate client = new RestTemplate();
 
     @Test
     void shouldReturnProducts() {
+        client.postForObject(URL, new ProductTestDto("AFA141", "Water", BigDecimal.valueOf(13), "to drink", 1L), Long.class);
+        client.postForObject(URL, new ProductTestDto("FDS134", "Bread", BigDecimal.valueOf(42), "to eat", 1L), Long.class);
+        client.postForObject(URL, new ProductTestDto("KJH855", "Coffee", BigDecimal.valueOf(12.34), "the best drink ever", 2L), Long.class);
+        client.postForObject(URL, new ProductTestDto("KJJ577", "Tea", BigDecimal.valueOf(7.13), "good to drink from time to time", 3L), Long.class);
+
         ProductTestDto[] response = client.getForObject(URL, ProductTestDto[].class);
 
         Arrays.stream(response).forEach(System.out::println);
@@ -23,6 +27,7 @@ class ProductRestControllerTest {
 
     @Getter
     @ToString
+    @NoArgsConstructor
     public static class ProductTestDto {
         private Long id;
         private String serialNumber;
@@ -30,5 +35,13 @@ class ProductRestControllerTest {
         private BigDecimal price;
         private String description;
         private Long shopId;
+
+        ProductTestDto(String serialNumber, String name, BigDecimal price, String description, Long shopId) {
+            this.serialNumber = serialNumber;
+            this.name = name;
+            this.price = price;
+            this.description = description;
+            this.shopId = shopId;
+        }
     }
 }
