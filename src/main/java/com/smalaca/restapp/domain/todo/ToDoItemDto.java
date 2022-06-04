@@ -4,11 +4,12 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 @Getter // serialization & deserialization
 @NoArgsConstructor // deserialization
 @AllArgsConstructor(access = AccessLevel.PACKAGE) // using in the code
-public class ToDoItemDto {
+public class ToDoItemDto extends RepresentationModel<ToDoItemDto> {
     private Long id;
     private String title;
     private String description;

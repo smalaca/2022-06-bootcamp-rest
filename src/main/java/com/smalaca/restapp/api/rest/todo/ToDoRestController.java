@@ -61,11 +61,20 @@ public class ToDoRestController {
 
         List<ToDoItemDto> dtos = StreamSupport.stream(iterable.spliterator(), false)
                 .map(ToDoItem::asDto)
+                .map(toDoItemDto -> withLinks(toDoItemDto))
                 .collect(Collectors.toList());
 
         Link linkOne = WebMvcLinkBuilder.linkTo(ToDoRestController.class).withSelfRel();
         Link linkTwo = WebMvcLinkBuilder.linkTo(ToDoRestController.class).withRel("todo-item-resource");
         return CollectionModel.of(dtos, linkOne, linkTwo);
+    }
+
+    private ToDoItemDto withLinks(ToDoItemDto toDoItemDto) {
+        Link read = WebMvcLinkBuilder.linkTo(ToDoRestController.class).slash(toDoItemDto.getId()).withRel("read");
+        Link delete = WebMvcLinkBuilder.linkTo(ToDoRestController.class).slash(toDoItemDto.getId()).withRel("delete");
+        Link modify = WebMvcLinkBuilder.linkTo(ToDoRestController.class).slash(toDoItemDto.getId()).withRel("modify");
+        toDoItemDto.add(read, delete, modify);
+        return toDoItemDto;
     }
 
     @GetMapping("/{id}")
