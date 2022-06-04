@@ -35,6 +35,16 @@ class ProductRestControllerTest {
     }
 
     @Test
+    void shouldUpdateSpecificProduct() {
+        Long id = client.postForObject(URL, new ProductTestDto("IUD456", "Honey", BigDecimal.valueOf(100), "sweet", 1L), Long.class);
+
+        client.put(URL + "/" + id, new ProductTestDto("Sweet Honey", BigDecimal.valueOf(97), "great for breakfest"));
+
+        ProductTestDto response = client.getForObject(URL + "/" + id, ProductTestDto.class);
+        System.out.println(response);
+    }
+
+    @Test
     void shouldDeleteSpecificProduct() {
         client.postForObject(URL, new ProductTestDto("YYY141", "Water", BigDecimal.valueOf(13), "to drink", 12L), Long.class);
         client.postForObject(URL, new ProductTestDto("ABC134", "Bread", BigDecimal.valueOf(42), "to eat", 12L), Long.class);
@@ -63,6 +73,12 @@ class ProductRestControllerTest {
             this.price = price;
             this.description = description;
             this.shopId = shopId;
+        }
+
+        ProductTestDto(String name, BigDecimal price, String description) {
+            this.name = name;
+            this.price = price;
+            this.description = description;
         }
     }
 }

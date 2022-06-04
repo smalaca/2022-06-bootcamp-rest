@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,13 @@ public class ProductRestController {
     @GetMapping("{id}")
     public ProductDto findById(@PathVariable Long id) {
         return repository.findById(id).get().asDto();
+    }
+
+    @PutMapping("{id}")
+    public void update(@PathVariable Long id, @RequestBody ProductDto dto) {
+        Product product = repository.findById(id).get();
+        product.update(dto);
+        repository.save(product);
     }
 
     @DeleteMapping("{id}")

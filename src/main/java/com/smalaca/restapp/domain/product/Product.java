@@ -35,4 +35,10 @@ public class Product {
     public Long getId() {
         return id;
     }
+
+    public void update(ProductDto dto) {
+        name = dto.getName();
+        price = dto.getPrice();
+        description = dto.getDescription();
+    }
 }
